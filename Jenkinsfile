@@ -20,6 +20,7 @@ CLOUDINARY_NAME=drnbuwvjs
 JWT_SECRET=ecommerce
 ADMIN_EMAIL=admin@gmail.com
 ADMIN_PASSWORD=admin1234
+"""
 
                     // frontend/.env
                     writeFile file: 'frontend/.env', text: """\
