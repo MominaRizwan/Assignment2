@@ -1,20 +1,45 @@
 version: "3.8"
 
 services:
-  backend:
+  backend-ci:
+    container_name: backend_ci_container
     build:
       context: ./backend
     ports:
-      - "4000:4000"
+      - "5000:4000" # Changed port
     volumes:
-      - ./backend:/app
+      - ./backend:/app # For code
+    networks:
+      - app_network
 
-  frontend:
+  frontend-ci:
+    container_name: frontend_ci_container
     build:
       context: ./frontend
     ports:
-      - "5173:5173"
+      - "5273:5173" # Changed port
     volumes:
-      - ./frontend:/app
+      - ./frontend:/app # For code
     depends_on:
-      - backend
+      - backend-ci
+    networks:
+      - app_network
+
+  db:
+    container_name: db_container
+    image: postgres:13
+    restart: always
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: app_db
+    volumes:
+      - db_data:/var/lib/postgresql/data # Persistent data
+    networks:
+      - app_network
+
+volumes:
+  db_data:
+
+networks:
+  app_network:
