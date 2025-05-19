@@ -7,8 +7,6 @@ services:
       context: ./backend
     ports:
       - "5000:4000" # Changed port
-    volumes:
-      - ./backend:/app # For code
     networks:
       - app_network
 
@@ -18,8 +16,6 @@ services:
       context: ./frontend
     ports:
       - "5273:5173" # Changed port
-    volumes:
-      - ./frontend:/app # For code
     depends_on:
       - backend-ci
     networks:
