@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   backend-ci:
-    container_name: backend_ci_container
+    container_name: backend_ci_container_v2   # Changed name to backend_ci_container_v2
     build:
       context: ./backend
     ports:
@@ -13,7 +13,7 @@ services:
       - app_network
 
   frontend-ci:
-    container_name: frontend_ci_container
+    container_name: frontend_ci_container_v2  # Changed name to frontend_ci_container_v2
     build:
       context: ./frontend
     ports:
@@ -24,7 +24,6 @@ services:
       - backend-ci
     networks:
       - app_network
-
 
 volumes:
   db_data:
