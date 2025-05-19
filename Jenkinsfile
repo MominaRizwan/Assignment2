@@ -2,51 +2,38 @@ pipeline {
     agent any
 
     stages {
-        stage('Clone Repository') {
+        stage('Checkout SCM') {
             steps {
-                git branch: 'main', url: 'https://github.com/MominaRizwan/Assignment2.git'
+                git url: 'https://github.com/MominaRizwan/Assignment2.git', branch: 'main'
             }
         }
 
-        stage('Create .env Files') {
+        stage('Clean up CI container') {
             steps {
-                script {
-                    // backend/.env
-                    writeFile file: 'backend/.env', text: """\
-MONGODB_URI=mongodb+srv://faizankhurshid83:PVlzUOO1Dx0hH3W4@cluster0.7msvc.mongodb.net
-CLOUDINARY_API_KEY=633795485598928
-CLOUDINARY_SECRET_KEY=R0IwTeoVX25ofUCtOmCf2jUofhw
-CLOUDINARY_NAME=drnbuwvjs
-JWT_SECRET=ecommerce
-ADMIN_EMAIL=admin@gmail.com
-ADMIN_PASSWORD=admin1234
-"""
-
-                    // frontend/.env
-                    writeFile file: 'frontend/.env', text: """\
-VITE_BACKEND_URL=http://54.145.158.79:4000
-"""
-                }
+                sh '''
+                    echo "Cleaning up existing CI container (if any)..."
+                    docker rm -f ecommerce-app-ci || true
+                '''
             }
         }
 
-        stage('Build & Deploy with Docker Compose') {
+        stage('Build & Run CI Container') {
             steps {
-                script {
-                    sh 'docker-compose -p ecommerce_ci down || true'
-                    sh 'docker-compose -p ecommerce_ci build'
-                    sh 'docker-compose -p ecommerce_ci up -d'
-                }
+                echo 'Building and starting container using docker-compose.ci.yml...'
+                sh 'docker-compose -p ecommerce_pipeline -f docker-compose.yml up -d --build'
             }
         }
     }
 
     post {
+        always {
+            echo 'Pipeline finished.'
+        }
         success {
-            echo "✅ Deployment successful!"
+            echo 'Build completed successfully!'
         }
         failure {
-            echo "❌ Deployment failed."
+            echo 'Build failed. Check logs for details.'
         }
     }
 }
