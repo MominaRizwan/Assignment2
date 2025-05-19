@@ -25,18 +25,6 @@ services:
     networks:
       - app_network
 
-  db:
-    container_name: db_container
-    image: postgres:13
-    restart: always
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: app_db
-    volumes:
-      - db_data:/var/lib/postgresql/data # Persistent data
-    networks:
-      - app_network
 
 volumes:
   db_data:
