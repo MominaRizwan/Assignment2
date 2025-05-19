@@ -1,24 +1,22 @@
 version: "3.8"
-
 services:
   backend-ci:
-    container_name: backend_ci_container_v2   # Changed name to backend_ci_container_v2
+    container_name: backend_ci_container_v2
     build:
       context: ./backend
     ports:
-      - "5000:4000" # Changed port
+      - "5000:4000"
     volumes:
       - ./backend:/app
       - /app/node_modules
     networks:
       - app_network
-
   frontend-ci:
-    container_name: frontend_ci_container_v2  # Changed name to frontend_ci_container_v2
+    container_name: frontend_ci_container_v2
     build:
       context: ./frontend
     ports:
-      - "5273:5173" # Changed port
+      - "5273:5173"
     volumes:
       - ./frontend:/app
       - /app/node_modules
@@ -26,11 +24,7 @@ services:
       - backend-ci
     networks:
       - app_network
-
 volumes:
   db_data:
-
 networks:
   app_network:
-
-  //comment
