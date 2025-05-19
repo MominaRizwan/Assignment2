@@ -8,19 +8,23 @@ pipeline {
             }
         }
 
-        stage('Clean up CI container') {
+        stage('Clean Up Containers and Images') {
             steps {
                 sh '''
-                    echo "Cleaning up existing CI container (if any)..."
-                    docker rm -f ecommerce-app-ci || true
+                    echo "Stopping and removing old containers and images..."
+                    docker rm -f frontend_ci_container_v2 backend_ci_container_v2 ecommerce-app-ci || true
+                    docker rmi ecommerce_pipeline_frontend-ci ecommerce_pipeline_backend-ci || true
+                    docker-compose -p ecommerce_pipeline -f docker-compose.yml down || true
                 '''
             }
         }
 
-        stage('Build & Run CI Container') {
+        stage('Build & Run CI Containers') {
             steps {
-                echo 'Building and starting container using docker-compose.ci.yml...'
-                sh 'docker-compose -p ecommerce_pipeline -f docker-compose.yml up -d --build'
+                echo 'Building and starting containers using docker-compose.yml...'
+                sh '''
+                    docker-compose -p ecommerce_pipeline -f docker-compose.yml up -d --build
+                '''
             }
         }
     }
