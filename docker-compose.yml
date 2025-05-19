@@ -9,6 +9,7 @@ services:
       - "5000:4000" # Changed port
     volumes:
       - ./backend:/app
+      - /app/node_modules
     networks:
       - app_network
 
@@ -20,6 +21,7 @@ services:
       - "5273:5173" # Changed port
     volumes:
       - ./frontend:/app
+      - /app/node_modules
     depends_on:
       - backend-ci
     networks:
