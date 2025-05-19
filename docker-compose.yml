@@ -1,4 +1,4 @@
-version: "3.8"
+version: "3.8" 
 services:
   backend-ci:
     container_name: backend_ci_container_v2
